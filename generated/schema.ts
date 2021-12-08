@@ -11,31 +11,34 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ExampleEntity extends Entity {
+export class Edition extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("count", Value.fromBigInt(BigInt.zero()));
-    this.set("owner", Value.fromBytes(Bytes.empty()));
-    this.set("approved", Value.fromBytes(Bytes.empty()));
+    this.set("owner", Value.fromString(""));
+    this.set("creator", Value.fromString(""));
+    this.set("name", Value.fromString(""));
+    this.set("editionSize", Value.fromBigInt(BigInt.zero()));
+    this.set("purchased", Value.fromStringArray(new Array(0)));
+    this.set("address", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ExampleEntity entity without an ID");
+    assert(id != null, "Cannot save Edition entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save ExampleEntity entity with non-string ID. " +
+        "Cannot save Edition entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("ExampleEntity", id.toString(), this);
+      store.set("Edition", id.toString(), this);
     }
   }
 
-  static load(id: string): ExampleEntity | null {
-    return changetype<ExampleEntity | null>(store.get("ExampleEntity", id));
+  static load(id: string): Edition | null {
+    return changetype<Edition | null>(store.get("Edition", id));
   }
 
   get id(): string {
@@ -47,30 +50,247 @@ export class ExampleEntity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get count(): BigInt {
-    let value = this.get("count");
+  get owner(): string {
+    let value = this.get("owner");
+    return value!.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
+  }
+
+  get creator(): string {
+    let value = this.get("creator");
+    return value!.toString();
+  }
+
+  set creator(value: string) {
+    this.set("creator", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
+  }
+
+  get salePrice(): BigInt | null {
+    let value = this.get("salePrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set salePrice(value: BigInt | null) {
+    if (!value) {
+      this.unset("salePrice");
+    } else {
+      this.set("salePrice", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get totalSupply(): BigInt | null {
+    let value = this.get("totalSupply");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalSupply(value: BigInt | null) {
+    if (!value) {
+      this.unset("totalSupply");
+    } else {
+      this.set("totalSupply", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get editionSize(): BigInt {
+    let value = this.get("editionSize");
     return value!.toBigInt();
   }
 
-  set count(value: BigInt) {
-    this.set("count", Value.fromBigInt(value));
+  set editionSize(value: BigInt) {
+    this.set("editionSize", Value.fromBigInt(value));
   }
 
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value!.toBytes();
+  get purchased(): Array<string> {
+    let value = this.get("purchased");
+    return value!.toStringArray();
   }
 
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
+  set purchased(value: Array<string>) {
+    this.set("purchased", Value.fromStringArray(value));
   }
 
-  get approved(): Bytes {
-    let value = this.get("approved");
-    return value!.toBytes();
+  get address(): string {
+    let value = this.get("address");
+    return value!.toString();
   }
 
-  set approved(value: Bytes) {
-    this.set("approved", Value.fromBytes(value));
+  set address(value: string) {
+    this.set("address", Value.fromString(value));
+  }
+
+  get imageURL(): string | null {
+    let value = this.get("imageURL");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageURL(value: string | null) {
+    if (!value) {
+      this.unset("imageURL");
+    } else {
+      this.set("imageURL", Value.fromString(<string>value));
+    }
+  }
+
+  get animationURL(): string | null {
+    let value = this.get("animationURL");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set animationURL(value: string | null) {
+    if (!value) {
+      this.unset("animationURL");
+    } else {
+      this.set("animationURL", Value.fromString(<string>value));
+    }
+  }
+
+  get imageHash(): Bytes | null {
+    let value = this.get("imageHash");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set imageHash(value: Bytes | null) {
+    if (!value) {
+      this.unset("imageHash");
+    } else {
+      this.set("imageHash", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get animationHash(): Bytes | null {
+    let value = this.get("animationHash");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set animationHash(value: Bytes | null) {
+    if (!value) {
+      this.unset("animationHash");
+    } else {
+      this.set("animationHash", Value.fromBytes(<Bytes>value));
+    }
+  }
+}
+
+export class Purchase extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromString(""));
+    this.set("purchasedAtTimestamp", Value.fromI32(0));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Purchase entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Purchase entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Purchase", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Purchase | null {
+    return changetype<Purchase | null>(store.get("Purchase", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): string {
+    let value = this.get("address");
+    return value!.toString();
+  }
+
+  set address(value: string) {
+    this.set("address", Value.fromString(value));
+  }
+
+  get price(): BigInt | null {
+    let value = this.get("price");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set price(value: BigInt | null) {
+    if (!value) {
+      this.unset("price");
+    } else {
+      this.set("price", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get purchasedAtTimestamp(): i32 {
+    let value = this.get("purchasedAtTimestamp");
+    return value!.toI32();
+  }
+
+  set purchasedAtTimestamp(value: i32) {
+    this.set("purchasedAtTimestamp", Value.fromI32(value));
   }
 }

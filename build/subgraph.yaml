@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: SingleEditionMintableCreator
@@ -17,13 +17,13 @@ dataSources:
         - CreatedEdition
       abis:
         - name: SingleEditionMintableCreator
-          file: ./abis/SingleEditionMintableCreator.json
+          file: SingleEditionMintableCreator/abis/SingleEditionMintableCreator.json
         - name: SingleEditionMintable
-          file: ./abis/SingleEditionMintable.json
+          file: SingleEditionMintableCreator/abis/SingleEditionMintable.json
       eventHandlers:
         - event: CreatedEdition(indexed uint256,indexed address,uint256,address)
           handler: handleCreatedEdition
-      file: ./src/edition-factory.ts
+      file: SingleEditionMintableCreator/SingleEditionMintableCreator.wasm
 templates:
   - kind: ethereum
     name: SingleEditionMintable
@@ -43,7 +43,7 @@ templates:
         - Transfer
       abis:
         - name: SingleEditionMintable
-          file: ./abis/SingleEditionMintable.json
+          file: SingleEditionMintable/abis/SingleEditionMintable.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
@@ -57,4 +57,4 @@ templates:
           handler: handlePriceChanged
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/edition.ts
+      file: templates/SingleEditionMintable/SingleEditionMintable.wasm
