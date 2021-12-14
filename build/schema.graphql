@@ -4,10 +4,11 @@ type Edition @entity {
   creator: String!
   name: String!
   description: String
-  salePrice: BigInt
+  salePrice: BigInt!
   totalSupply: BigInt
   editionSize: BigInt!
-  purchased: [Purchase!]!
+  purchased: [Purchase!]! @derivedFrom(field: "edition")
+  balance: BigInt!
   address: String!
   imageURL: String
   animationURL: String
@@ -19,5 +20,6 @@ type Purchase @entity {
   id: ID!
   address: String!
   price: BigInt
-  purchasedAtTimestamp: Int
+  purchasedAtTimestamp: BigInt!
+  edition: Edition!
 }

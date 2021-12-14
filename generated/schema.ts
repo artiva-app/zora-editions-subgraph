@@ -19,8 +19,9 @@ export class Edition extends Entity {
     this.set("owner", Value.fromString(""));
     this.set("creator", Value.fromString(""));
     this.set("name", Value.fromString(""));
+    this.set("salePrice", Value.fromBigInt(BigInt.zero()));
     this.set("editionSize", Value.fromBigInt(BigInt.zero()));
-    this.set("purchased", Value.fromStringArray(new Array(0)));
+    this.set("balance", Value.fromBigInt(BigInt.zero()));
     this.set("address", Value.fromString(""));
   }
 
@@ -94,21 +95,13 @@ export class Edition extends Entity {
     }
   }
 
-  get salePrice(): BigInt | null {
+  get salePrice(): BigInt {
     let value = this.get("salePrice");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value!.toBigInt();
   }
 
-  set salePrice(value: BigInt | null) {
-    if (!value) {
-      this.unset("salePrice");
-    } else {
-      this.set("salePrice", Value.fromBigInt(<BigInt>value));
-    }
+  set salePrice(value: BigInt) {
+    this.set("salePrice", Value.fromBigInt(value));
   }
 
   get totalSupply(): BigInt | null {
@@ -144,6 +137,15 @@ export class Edition extends Entity {
 
   set purchased(value: Array<string>) {
     this.set("purchased", Value.fromStringArray(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value!.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
   }
 
   get address(): string {
@@ -230,7 +232,8 @@ export class Purchase extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("address", Value.fromString(""));
-    this.set("purchasedAtTimestamp", Value.fromI32(0));
+    this.set("purchasedAtTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("edition", Value.fromString(""));
   }
 
   save(): void {
@@ -285,12 +288,21 @@ export class Purchase extends Entity {
     }
   }
 
-  get purchasedAtTimestamp(): i32 {
+  get purchasedAtTimestamp(): BigInt {
     let value = this.get("purchasedAtTimestamp");
-    return value!.toI32();
+    return value!.toBigInt();
   }
 
-  set purchasedAtTimestamp(value: i32) {
-    this.set("purchasedAtTimestamp", Value.fromI32(value));
+  set purchasedAtTimestamp(value: BigInt) {
+    this.set("purchasedAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get edition(): string {
+    let value = this.get("edition");
+    return value!.toString();
+  }
+
+  set edition(value: string) {
+    this.set("edition", Value.fromString(value));
   }
 }

@@ -1,5 +1,8 @@
-import { Address, dataSource } from "@graphprotocol/graph-ts";
-import { SingleEditionMintable as EditionContract } from "../generated/templates/SingleEditionMintable/SingleEditionMintable";
+import { Address, dataSource, BigInt } from "@graphprotocol/graph-ts";
+import {
+  FundsWithdrawn,
+  SingleEditionMintable as EditionContract,
+} from "../generated/templates/SingleEditionMintable/SingleEditionMintable";
 import {
   Approval,
   ApprovalForAll,
@@ -17,15 +20,18 @@ export function handleEditionSold(event: EditionSold): void {
   let purchase = new Purchase(event.transaction.hash.toString());
   purchase.address = event.params.owner.toHexString();
   purchase.price = event.params.price;
+  purchase.edition = editionId;
+  purchase.purchasedAtTimestamp = event.block.timestamp;
   purchase.save();
 
   let edition = Edition.load(editionId);
   if (!edition) edition = new Edition(editionId);
-  edition.purchased.push(event.transaction.hash.toString());
   const editionContract = EditionContract.bind(
     Address.fromString(edition.address)
   );
   edition.totalSupply = editionContract.totalSupply();
+  edition.balance = edition.balance.plus(edition.salePrice);
+
   edition.save();
 }
 
@@ -41,6 +47,13 @@ export function handlePriceChanged(event: PriceChanged): void {
   let edition = Edition.load(editionId);
   if (!edition) edition = new Edition(editionId);
   edition.salePrice = event.params.amount;
+  edition.save();
+}
+
+export function handleWithdraw(event: FundsWithdrawn): void {
+  let edition = Edition.load(editionId);
+  if (!edition) edition = new Edition(editionId);
+  edition.balance = edition.balance.minus(event.params.amount);
   edition.save();
 }
 
