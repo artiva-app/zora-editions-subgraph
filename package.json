@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --product hosted-service neokry/zora-editions",
-    "create-local": "graph create --node http://localhost:8020/ zora-editions",
-    "remove-local": "graph remove --node http://localhost:8020/ zora-editions",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 zora-editions"
+    "deploy": "graph deploy --product hosted-service neokry/nft-editions-mainnet",
+    "create-local": "graph create --node http://localhost:8020/ nft-editions",
+    "remove-local": "graph remove --node http://localhost:8020/ nft-editions",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-editions"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.25.0",

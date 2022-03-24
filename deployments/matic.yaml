@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: SingleEditionMintableCreator
-    network: mainnet
+    network: matic
     source:
-      address: "0x048cEEE6Acc4e7d6ef12F241bCA5492d7DB7B3c6"
+      address: "0x0685ebF83dD829ac01Ca1d5C69Dd8c3cb56D8C55"
       abi: SingleEditionMintableCreator
-      startBlock: 13812000
+      startBlock: 22400000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -24,10 +24,36 @@ dataSources:
         - event: CreatedEdition(indexed uint256,indexed address,uint256,address)
           handler: handleCreatedEdition
       file: ./src/edition-factory.ts
+  - kind: ethereum
+    name: CuratorEditions
+    network: matic
+    source:
+      address: "0xA31d4DAb12F5aDA8a99ff3C2395eF8eC3f8d9c3C"
+      abi: CuratorEditions
+      startBlock: 22400000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CreatedEdition
+      abis:
+        - name: CuratorEditions
+          file: ./abis/CuratorEditions.json
+        - name: SingleEditionMintable
+          file: ./abis/SingleEditionMintable.json
+      eventHandlers:
+        - event: CreatedEdition(address,uint256)
+          handler: handleCreatedEdition
+        - event: EditionSold(uint256,uint256,address)
+          handler: handleEditionSold
+        - event: PriceChanged(uint256,uint256)
+          handler: handlePriceChanged
+      file: ./src/edition-curator.ts
 templates:
   - kind: ethereum
     name: SingleEditionMintable
-    network: mainnet
+    network: matic
     source:
       abi: SingleEditionMintable
     mapping:

@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: SingleEditionMintableCreator
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0x3975b5ECF50986c0a2Cf899FFEc5A5e569429242"
+      address: "0x048cEEE6Acc4e7d6ef12F241bCA5492d7DB7B3c6"
       abi: SingleEditionMintableCreator
-      startBlock: 9751990
+      startBlock: 13812000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -24,36 +24,10 @@ dataSources:
         - event: CreatedEdition(indexed uint256,indexed address,uint256,address)
           handler: handleCreatedEdition
       file: SingleEditionMintableCreator/SingleEditionMintableCreator.wasm
-  - kind: ethereum
-    name: CuratorEditions
-    network: rinkeby
-    source:
-      address: "0x2031144a58D6D2d5E5AFb1c7BE14036C5e74003f"
-      abi: CuratorEditions
-      startBlock: 9751990
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - CreatedEdition
-      abis:
-        - name: CuratorEditions
-          file: CuratorEditions/abis/CuratorEditions.json
-        - name: SingleEditionMintable
-          file: CuratorEditions/abis/SingleEditionMintable.json
-      eventHandlers:
-        - event: CreatedEdition(address,uint256)
-          handler: handleCreatedEdition
-        - event: EditionSold(uint256,uint256,address)
-          handler: handleEditionSold
-        - event: PriceChanged(uint256,uint256)
-          handler: handlePriceChanged
-      file: CuratorEditions/CuratorEditions.wasm
 templates:
   - kind: ethereum
     name: SingleEditionMintable
-    network: rinkeby
+    network: mainnet
     source:
       abi: SingleEditionMintable
     mapping:
@@ -66,7 +40,7 @@ templates:
         - EditionSold
         - OwnershipTransferred
         - PriceChanged
-        - Transfer
+        - TransferTr
       abis:
         - name: SingleEditionMintable
           file: SingleEditionMintable/abis/SingleEditionMintable.json

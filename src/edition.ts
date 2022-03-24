@@ -57,7 +57,17 @@ export function handleWithdraw(event: FundsWithdrawn): void {
   edition.save();
 }
 
-export function handleTransfer(event: Transfer): void {}
+export function handleTransfer(event: Transfer): void {
+  if (event.params.from.equals(Address.zero())) {
+    let edition = Edition.load(editionId);
+    if (!edition) edition = new Edition(editionId);
+    const editionContract = EditionContract.bind(
+      Address.fromString(edition.address)
+    );
+    edition.totalSupply = editionContract.totalSupply();
+    edition.save();
+  }
+}
 
 export function handleApproval(event: Approval): void {}
 
